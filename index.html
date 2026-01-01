@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>2026元旦抽奖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "SimHei", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #fef2f2;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+        .footer-signature {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc2626;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #dc2626;
+            margin-top: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e11d48;
+        }
+        .header h1 {
+            color: #b91c1c;
+            font-size: 28px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .rank-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 5px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-weight: 500;
+        }
+        .nickname-box {
+            margin-bottom: 20px;
+        }
+        .nickname-box label {
+            display: block;
+            color: #b91c1c;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .nickname-box label span {
+            color: red;
+        }
+        .nickname-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #fee2e2;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+        .nickname-box input.error {
+            border-color: red;
+        }
+        .nickname-tip {
+            font-size: 12px;
+            color: red;
+            margin-top: 5px;
+            display: none;
+        }
+        .nickname-tip.show {
+            display: block;
+        }
+        .prize-list {
+            margin-bottom: 20px;
+        }
+        .prize-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #fee2e2;
+        }
+        .prize-info h3 {
+            color: #b91c1c;
+            font-size: 18px;
+        }
+        .prize-count {
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .draw-btn {
+            width: 100%;
+            padding: 15px 0;
+            background: linear-gradient(90deg, #dc2626, #e11d48);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .draw-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #b91c1c;
+            padding: 10px;
+            background: #fef2f2;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .total {
+            text-align: center;
+            font-size: 14px;
+            color: #7f1d1d;
+            margin-bottom: 20px;
+        }
+        .rank-list {
+            background: #fef2f2;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .rank-title {
+            text-align: center;
+            color: #b91c1c;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        .rank-num {
+            color: #dc2626;
+            font-weight: bold;
+            width: 25px;
+        }
+        .rank-name {
+            flex: 1;
+            padding-left: 10px;
+        }
+        .rank-prize {
+            width: 100px;
+            text-align: right;
+        }
+        .rank-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+        }
+        .modal-content {
+            width: 85%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #dc2626;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #fee2e2;
+        }
+        .modal-header h3 {
+            color: #b91c1c;
+            font-size: 20px;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #dc2626;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="footer-signature">李瑞制作 © 2026</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>元旦快乐 抽奖</h1>
+        </div>
+
+        <div class="btn-group">
+            <button class="rank-btn" id="rankBtn">查看总排行榜</button>
+        </div>
+
+        <div class="nickname-box">
+            <label for="nickname">你的昵称：<span>*</span></label>
+            <input type="text" id="nickname" placeholder="输入昵称才能抽奖">
+            <div class="nickname-tip" id="nicknameTip">昵称不能为空！</div>
+        </div>
+
+        <div class="prize-list">
+            <div class="prize-item">
+                <div class="prize-info">
+                    <h3>一等奖：一杯奶茶（我选）</h3>
+                </div>
+                <div class="prize-count" id="first">1</div>
+            </div>
+            <div class="prize-item">
+                <div class="prize-info">
+                    <h3>二等奖：一支笔</h3>
+                </div>
+                <div class="prize-count" id="second">3</div>
+            </div>
+            <div class="prize-item">
+                <div class="prize-info">
+                    <h3>三等奖：1元</h3>
+                </div>
+                <div class="prize-count" id="third">9</div>
+            </div>
+            <div class="prize-item">
+                <div class="prize-info">
+                    <h3>四等奖：0.05元</h3>
+                </div>
+                <div class="prize-count" id="fourth">50</div>
+            </div>
+        </div>
+
+        <button class="draw-btn" id="drawBtn">点击抽奖</button>
+        <div class="result" id="result">等待抽奖...</div>
+        <div class="total" id="total">剩余奖品总数：63</div>
+
+        <div class="rank-list">
+            <div class="rank-title">最新中奖（按奖项高低）</div>
+            <div id="rankContainer"></div>
+        </div>
+    </div>
+
+    <div class="rank-modal" id="rankModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>总中奖排行榜（按奖项高低）</h3>
+                <button class="close-btn" id="closeBtn">&times;</button>
+            </div>
+            <div id="totalRankContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const PRIZE_WEIGHT = {
+            first: 1,
+            second: 5,
+            third: 15,
+            fourth: 79
+        };
+
+        const PRIZE_LEVEL = {
+            '一等奖【一杯奶茶（我选）】': 4,
+            '二等奖【一支笔】': 3,
+            '三等奖【1元】': 2,
+            '四等奖【0.05元】': 1
+        };
+
+        const INIT_PRIZES = { first: 1, second: 3, third: 9, fourth: 50 };
+        const RANK_KEY = 'lottery_rank_list';
+        const HAS_DRAWN_KEY = 'has_lottery_drawn';
+        let currentPrizes = { ...INIT_PRIZES };
+
+        // DOM元素
+        const nicknameInput = document.getElementById('nickname');
+        const nicknameTip = document.getElementById('nicknameTip');
+        const drawBtn = document.getElementById('drawBtn');
+        const resultBox = document.getElementById('result');
+        const totalBox = document.getElementById('total');
+        const rankBtn = document.getElementById('rankBtn');
+        const rankModal = document.getElementById('rankModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const rankContainer = document.getElementById('rankContainer');
+        const totalRankContainer = document.getElementById('totalRankContainer');
+        const prizeElements = {
+            first: document.getElementById('first'),
+            second: document.getElementById('second'),
+            third: document.getElementById('third'),
+            fourth: document.getElementById('fourth')
+        };
+
+        // 页面初始化时，强制清除历史测试记录
+        function clearAllHistory() {
+            localStorage.removeItem(RANK_KEY);
+            localStorage.removeItem(HAS_DRAWN_KEY);
+        }
+
+        function initPage() {
+            // 打开页面就清空历史记录，试验记录再也不显示
+            clearAllHistory();
+
+            drawBtn.disabled = false;
+            nicknameInput.disabled = false;
+            resultBox.textContent = '等待抽奖...';
+
+            updatePrizeDisplay();
+            renderRankList('rankContainer', sortRankList(getRankList()).slice(0, 5));
+            
+            // 绑定事件
+            drawBtn.addEventListener('click', handleDraw);
+            rankBtn.addEventListener('click', openRankModal);
+            closeBtn.addEventListener('click', closeRankModal);
+            rankModal.addEventListener('click', (e) => e.target === rankModal && closeRankModal());
+            nicknameInput.addEventListener('input', () => {
+                if (nicknameInput.value.trim()) {
+                    nicknameInput.classList.remove('error');
+                    nicknameTip.classList.remove('show');
+                }
+            });
+        }
+
+        function markHasDrawn() {
+            localStorage.setItem(HAS_DRAWN_KEY, 'true');
+        }
+
+        function sortRankList(list) {
+            return list.sort((a, b) => {
+                const levelDiff = PRIZE_LEVEL[b.prizeName] - PRIZE_LEVEL[a.prizeName];
+                if (levelDiff !== 0) return levelDiff;
+                return b.time - a.time;
+            });
+        }
+
+        function randomPrize() {
+            const weightSum = Object.values(PRIZE_WEIGHT).reduce((a, b) => a + b, 0);
+            let randomNum = Math.floor(Math.random() * weightSum)+1;
+            let sum = 0;
+
+            for (const type in PRIZE_WEIGHT) {
+                sum += PRIZE_WEIGHT[type];
+                if (randomNum <= sum) {
+                    return type;
+                }
+            }
+            return 'fourth';
+        }
+
+        function handleDraw() {
+            if (localStorage.getItem(HAS_DRAWN_KEY) === 'true') {
+                resultBox.textContent = '你已参与过抽奖，每台设备仅能抽一次哦！';
+                return;
+            }
+
+            const nickname = nicknameInput.value.trim();
+            if (!nickname) {
+                nicknameInput.classList.add('error');
+                nicknameTip.classList.add('show');
+                return;
+            }
+
+            const totalLeft = Object.values(currentPrizes).reduce((a, b) => a + b, 0);
+            if (totalLeft <= 0) {
+                resultBox.textContent = '奖品已全部抽完！';
+                drawBtn.disabled = true;
+                return;
+            }
+
+            let prizeType = randomPrize();
+            while (currentPrizes[prizeType] <= 0) {
+                prizeType = randomPrize();
+            }
+
+            currentPrizes[prizeType]--;
+            updatePrizeDisplay();
+
+            const prizeNames = {
+                first: '一等奖【一杯奶茶（我选）】',
+                second: '二等奖【一支笔】',
+                third: '三等奖【1元】',
+                fourth: '四等奖【0.05元】'
+            };
+            const prizeName = prizeNames[prizeType];
+            resultBox.textContent = `🎉 ${nickname} 恭喜抽中 ${prizeName}！`;
+
+            markHasDrawn();
+            drawBtn.disabled = true;
+            nicknameInput.disabled = true;
+
+            addToRankList(nickname, prizeName);
+            renderRankList('rankContainer', sortRankList(getRankList()).slice(0, 5));
+        }
+
+        function updatePrizeDisplay() {
+            prizeElements.first.textContent = currentPrizes.first;
+            prizeElements.second.textContent = currentPrizes.second;
+            prizeElements.third.textContent = currentPrizes.third;
+            prizeElements.fourth.textContent = currentPrizes.fourth;
+            const total = Object.values(currentPrizes).reduce((a, b) => a + b, 0);
+            totalBox.textContent = `剩余奖品总数：${total}`;
+            drawBtn.disabled = drawBtn.disabled || total <= 0;
+        }
+
+        function getRankList() {
+            const list = localStorage.getItem(RANK_KEY);
+            return list ? JSON.parse(list) : [];
+        }
+
+        function addToRankList(nickname, prizeName) {
+            const rankList = getRankList();
+            rankList.unshift({ nickname, prizeName, time: new Date().getTime() });
+            if (rankList.length > 50) rankList.splice(50);
+            localStorage.setItem(RANK_KEY, JSON.stringify(rankList));
+        }
+
+        function renderRankList(containerId, list) {
+            const container = document.getElementById(containerId);
+            if (list.length === 0) {
+                container.innerHTML = '<div class="rank-item"><span class="rank-num">-</span><span class="rank-name">暂无中奖记录</span><span class="rank-prize">-</span></div>';
+                return;
+            }
+            let html = '';
+            list.forEach((item, index) => {
+                html += `
+                    <div class="rank-item">
+                        <span class="rank-num">${index + 1}</span>
+                        <span class="rank-name">${item.nickname}</span>
+                        <span class="rank-prize">${item.prizeName}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function openRankModal() {
+            const sortedList = sortRankList(getRankList());
+            renderRankList('totalRankContainer', sortedList);
+            rankModal.style.display = 'flex';
+        }
+
+        function closeRankModal() {
+            rankModal.style.display = 'none';
+        }
+
+        window.onload = initPage;
+    </script>
+</body>
+</html>
